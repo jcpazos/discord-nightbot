@@ -1,0 +1,13 @@
+{
+  "name": "NightBot",
+  "version": "1.0.0",
+  "description": "Twitch-like Discord Nightbot",
+  "main": "bot.js",
+  "author": "Jose Carlos Pazos",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "sqlite3": "^4.1.0",
+    "winston": "^3.2.1"
+  }
+}
