@@ -7,15 +7,23 @@ class CommandRepository {
     const sql = `
     CREATE TABLE IF NOT EXISTS commands (
       name TEXT PRIMARY KEY,
-      value TEXT)`
+      value TEXT,
+      periodic INTEGER)`
     return this.dao.run(sql);
   }
 
   create(name, value) {
     return this.dao.run(
-      `INSERT INTO commands (name, value)
-        VALUES (?, ?)`,
-      [name, value]);
+      `INSERT INTO commands (name, value, periodic)
+        VALUES (?, ?, ?)`,
+      [name, value, 0]);
+  }
+
+  createPeriodic(name, value) {
+    return this.dao.run(
+      `INSERT INTO commands (name, value, periodic)
+        VALUES (?, ?, ?)`,
+      [name, value, 1]);
   }
 
   update(command) {
@@ -44,9 +52,9 @@ class CommandRepository {
     );
   }
 
-  /*getAll() {
+  getAll() {
     return this.dao.all(`SELECT * FROM commands`);
-  }*/
+  }
 }
 
 module.exports = CommandRepository;

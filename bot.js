@@ -33,6 +33,32 @@ commandRepo.createTable()
   console.log(JSON.stringify(err));
 });
 
+
+let intervals = [];
+
+function setPeriodicCommand(command) {
+    return setInterval(function() {
+        bot.sendMessage({
+            to: '650397815427563580',
+            message: command.value
+        });
+    }, 3600000);
+}
+
+function initPeriodic() {
+    commandRepo.getAll().then(function (commands) {
+        console.log("all commands", commands);
+        let periodicCommands = commands.filter(command => command.periodic === 1);
+        console.log("periodicCommands", periodicCommands);
+        for (let i = 0; i < periodicCommands.length; i++) {
+            intervals.push(setPeriodicCommand(periodicCommands[i]));
+        }
+    }).catch(function (err) {
+        console.log('Error retrieving all commands!: ');
+        console.log(JSON.stringify(err));
+    });
+}
+
 // Initialize Discord Bot
 var bot = new Discord.Client({
    token: auth.token,
@@ -42,6 +68,7 @@ bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
+    initPeriodic();
 });
 bot.on('message', function (user, userID, channelID, message, evt) {
     // Our bot needs to know if it will execute a command
@@ -55,9 +82,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
         commandRepo.getByName(cmd).then(function (command) {
             bot.sendMessage({
-                    to: channelID,
-                    message: command.value
-                });
+                to: channelID,
+                message: command.value
+            });
         }).catch(function (err) {
             console.log('Command not found!: ');
             console.log(JSON.stringify(err));
@@ -83,6 +110,21 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     bot.sendMessage({
                         to: channelID,
                         message: 'Command ' + commandName + ' could not be created. Does it already exist?'
+                    });
+                });
+                break;
+            case 'newcommandperiodic':
+                commandRepo.createPeriodic(commandName, commandValue).then((data) => {
+                    console.log("Created periodic command with id: " + data.id);
+                    bot.sendMessage({
+                        to: channelID,
+                        message: 'Periodic command ' + commandName + ' created.'
+                    });
+                }).catch(function (err) {
+                    console.log("Error when creating the periodic command, does it already exist?");
+                    bot.sendMessage({
+                        to: channelID,
+                        message: 'Periodic command ' + commandName + ' could not be created. Does it already exist?'
                     });
                 });
                 break;

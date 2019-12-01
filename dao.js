@@ -40,7 +40,7 @@ class AppDAO {
     });
   }
 
-  /*all(sql, params = []) {
+  all(sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.all(sql, params, (err, rows) => {
         if (err) {
@@ -52,7 +52,7 @@ class AppDAO {
         }
       });
     });
-  }*/
+  }
 }
 
 module.exports = AppDAO
