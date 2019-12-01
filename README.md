@@ -22,6 +22,12 @@ Update an existing command with:
 Delete an existing command with:
 
     !deletecommand `commandName`
+
+Create a periodic message with:
+
+    !newcommandperiodic `commandName` `commandValue`
     
-   
-Other features like periodic messaging are in development.
+Currently, periodic messages are sent every hour, all at the same time.
+    
+Other features like counters as part of the message still W.I.P.
+
